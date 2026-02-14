@@ -14,6 +14,7 @@ export default function App() {
   const [radiusKm, setRadiusKm] = useState(7);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [sortBy, setSortBy] = useState("relevance");
 
   const [center, setCenter] = useState(DEFAULT_CENTER);
   const [places, setPlaces] = useState([]);
@@ -180,13 +181,31 @@ export default function App() {
         </section>
 
         <section className="resultsCard">
-          <div className="cardHeader">
-            <h2>Results</h2>
-            <p>{places.length ? `${places.length} places found` : "Search to see places"}</p>
+          <div className="cardHeader" id="resultsHeader">
+            <div>
+              <h2>Results</h2>
+              <p>{places.length ? `${places.length} places found` : "Search to see places"}</p>
+            </div>
+            <div className="sortControls">
+              <h2>Sort By:</h2>
+              <select className="sortSelect" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                <option value="relevance">Relevance</option>
+                <option value="rating">Rating</option>
+              </select>
+            </div>
           </div>
 
           <div className="results">
-            {places.map((p) => (
+            {[...places]
+            .sort((a, b) => {
+              if (sortBy === "rating") {
+                return (b.rating || 0) - (a.rating || 0);
+              }
+              else{
+                return 0; // default order (relevance)
+              }
+            })
+            .map((p) => (
               <button
                 key={p.id}
                 className={`resultRow ${p.id === selectedId ? "active" : ""}`}
