@@ -275,6 +275,117 @@ body {
   font-size: 12px;
 }
 
+.rightColumn {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 14px;
+  height: fit-content;
+  max-height: calc(100vh - 180px);
+}
+
+.chatbotCard {
+  border: 1px solid var(--border);
+  background: rgba(18,25,38,0.75);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 320px;
+}
+
+.chatContent {
+  overflow-y: auto;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chatFallback {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 20px;
+  min-height: 100%;
+}
+
+.messageGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.messageLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.messageBubble {
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  border: 1px solid rgba(89,217,142,0.25);
+  background: rgba(89,217,142,0.12);
+  color: var(--text);
+}
+
+.messageBubble.system {
+  background: rgba(120,180,255,0.12);
+  border-color: rgba(120,180,255,0.25);
+  font-weight: 600;
+}
+
+.messageBubble.loading {
+  background: rgba(255,198,41,0.12);
+  border-color: rgba(255,198,41,0.25);
+  color: rgba(255,198,41,0.9);
+  text-align: center;
+}
+
+.messageBubble.error {
+  background: rgba(255,90,122,0.12);
+  border-color: rgba(255,90,122,0.35);
+  color: #ffd2db;
+}
+
+.dots {
+  display: inline-block;
+}
+
+.dots::after {
+  content: '';
+  animation: dots 1.4s infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: ''; }
+  40% { content: '.'; }
+  60% { content: '..'; }
+  80%, 100% { content: '...'; }
+}
+
+.chatFooter {
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  background: rgba(18,25,38,0.5);
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.chatHint {
+  display: block;
+  opacity: 0.7;
+}
+
 @media (max-width: 980px) {
   .content {
     grid-template-columns: 1fr;
@@ -282,5 +393,13 @@ body {
   .mapWrap, .mapFallback { height: 420px; }
   .searchBar {
     grid-template-columns: 1fr;
+  }
+  .rightColumn {
+    grid-template-rows: auto auto;
+    max-height: none;
+    height: auto;
+  }
+  .chatbotCard {
+    height: 300px;
   }
 }

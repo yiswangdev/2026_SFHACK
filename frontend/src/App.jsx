@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { GoogleMap, Marker, InfoWindow, useLoadScript } from "@react-google-maps/api";
+import ChatBot from "./ChatBot";
 import "./App.css";
 
 const DEFAULT_CENTER = { lat: 39.8283, lng: -98.5795 }; // US center
@@ -20,10 +21,8 @@ export default function App() {
   const [places, setPlaces] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
 
-  const selectedPlace = useMemo(
-    () => places.find((p) => p.id === selectedId) || null,
-    [places, selectedId]
-  );
+  const [chatbotData, setChatbotData] = useState(null);
+  const [chatbotLoading, setChatbotLoading] = useState(false);
 
   const apiBase = import.meta.env.VITE_API_BASE || "";
   const browserKey = import.meta.env.VITE_GOOGLE_MAPS_BROWSER_KEY;
@@ -32,11 +31,62 @@ export default function App() {
     googleMapsApiKey: browserKey,
   });
 
+  const selectedPlace = useMemo(
+    () => places.find((p) => p.id === selectedId) || null,
+    [places, selectedId]
+  );
+
+  // Fetch chatbot summary when a place is selected
+  useEffect(() => {
+    if (!selectedPlace) {
+      setChatbotData(null);
+      return;
+    }
+
+    const fetchSummary = async () => {
+      setChatbotLoading(true);
+      try {
+        const res = await fetch(`${apiBase}/api/summarize`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: selectedPlace.name,
+            address: selectedPlace.address,
+            category: selectedPlace.category,
+            rating: selectedPlace.rating,
+            website: selectedPlace.website,
+            phone: selectedPlace.phone,
+          }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data?.error || "Failed to generate summary");
+
+        setChatbotData({
+          storeName: data.name,
+          summary: data.summary,
+        });
+      } catch (err) {
+        console.error("Chatbot error:", err);
+        setChatbotData({
+          storeName: selectedPlace.name,
+          summary: null,
+          error: err?.message,
+        });
+      } finally {
+        setChatbotLoading(false);
+      }
+    };
+
+    fetchSummary();
+  }, [selectedPlace, apiBase]);
+
   const onSearch = async (e) => {
     e?.preventDefault();
     setError("");
     setLoading(true);
     setSelectedId(null);
+    setChatbotData(null);
 
     try {
       const rMeters = Math.max(1000, Math.min(50000, Math.round(radiusKm * 1000)));
@@ -180,61 +230,65 @@ export default function App() {
           </div>
         </section>
 
-        <section className="resultsCard">
-          <div className="cardHeader" id="resultsHeader">
-            <div>
-              <h2>Results</h2>
-              <p>{places.length ? `${places.length} places found` : "Search to see places"}</p>
+        <div className="rightColumn">
+          <section className="resultsCard">
+            <div className="cardHeader" id="resultsHeader">
+              <div>
+                <h2>Results</h2>
+                <p>{places.length ? `${places.length} places found` : "Search to see places"}</p>
+              </div>
+              <div className="sortControls">
+                <h2>Sort By:</h2>
+                <select className="sortSelect" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                  <option value="relevance">Relevance</option>
+                  <option value="rating">Rating</option>
+                </select>
+              </div>
             </div>
-            <div className="sortControls">
-              <h2>Sort By:</h2>
-              <select className="sortSelect" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                <option value="relevance">Relevance</option>
-                <option value="rating">Rating</option>
-              </select>
+
+            <div className="results">
+              {[...places]
+              .sort((a, b) => {
+                if (sortBy === "rating") {
+                  return (b.rating || 0) - (a.rating || 0);
+                }
+                else{
+                  return 0; // default order (relevance)
+                }
+              })
+              .map((p) => (
+                <button
+                  key={p.id}
+                  className={`resultRow ${p.id === selectedId ? "active" : ""}`}
+                  onClick={() => {
+                    setSelectedId(p.id);
+                    setCenter({ lat: p.lat, lng: p.lng });
+                  }}
+                >
+                  <div className="resultTop">
+                    <div className="resultName">{p.name}</div>
+                    <Badge>{p.category}</Badge>
+                  </div>
+
+                  <div className="resultAddress">{p.address}</div>
+
+                  <div className="resultBottom">
+                    {p.rating != null ? (
+                      <span className="rating">
+                        ⭐ {p.rating} {p.ratingCount ? `(${p.ratingCount})` : ""}
+                      </span>
+                    ) : (
+                      <span className="muted">No rating</span>
+                    )}
+                    <span className="muted">{p.phone || ""}</span>
+                  </div>
+                </button>
+              ))}
             </div>
-          </div>
+          </section>
 
-          <div className="results">
-            {[...places]
-            .sort((a, b) => {
-              if (sortBy === "rating") {
-                return (b.rating || 0) - (a.rating || 0);
-              }
-              else{
-                return 0; // default order (relevance)
-              }
-            })
-            .map((p) => (
-              <button
-                key={p.id}
-                className={`resultRow ${p.id === selectedId ? "active" : ""}`}
-                onClick={() => {
-                  setSelectedId(p.id);
-                  setCenter({ lat: p.lat, lng: p.lng });
-                }}
-              >
-                <div className="resultTop">
-                  <div className="resultName">{p.name}</div>
-                  <Badge>{p.category}</Badge>
-                </div>
-
-                <div className="resultAddress">{p.address}</div>
-
-                <div className="resultBottom">
-                  {p.rating != null ? (
-                    <span className="rating">
-                      ⭐ {p.rating} {p.ratingCount ? `(${p.ratingCount})` : ""}
-                    </span>
-                  ) : (
-                    <span className="muted">No rating</span>
-                  )}
-                  <span className="muted">{p.phone || ""}</span>
-                </div>
-              </button>
-            ))}
-          </div>
-        </section>
+          <ChatBot selectedPlace={chatbotData} loading={chatbotLoading} />
+        </div>
       </main>
 
       <footer className="footer">
