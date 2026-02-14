@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 dotenv.config();
 
@@ -9,6 +10,12 @@ app.use(cors());
 app.use(express.json());
 
 const GOOGLE_KEY = process.env.GOOGLE_MAPS_API_KEY;
+const GEMINI_KEY = process.env.GEMINI_API_KEY;
+
+let genAI;
+if (GEMINI_KEY) {
+  genAI = new GoogleGenerativeAI(GEMINI_KEY);
+}
 
 app.get("/api/health", (req, res) => {
   res.json({ ok: true, message: "Backend running" });
@@ -106,6 +113,46 @@ app.get("/api/search", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error", detail: err?.message || String(err) });
+  }
+});
+
+// POST /api/summarize
+// Body: { name, address, category, rating, website, phone }
+app.post("/api/summarize", async (req, res) => {
+  try {
+    if (!GEMINI_KEY) {
+      return res.status(500).json({ error: "GEMINI_API_KEY not configured" });
+    }
+
+    const { name, address, category, rating, website, phone } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ error: "Missing store name" });
+    }
+
+    console.log(`[Gemini] Generating summary for: ${name}`);
+
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+    const prompt = `Provide a concise, engaging summary (2-3 sentences) about this thrift store:
+
+Name: ${name}
+Address: ${address || "Not provided"}
+Category: ${category || "Thrift Store"}
+Rating: ${rating ? `${rating}/5` : "No rating"}
+Website: ${website || "Not available"}
+Phone: ${phone || "Not available"}
+
+Focus on what makes this store unique, its vibe, and why someone should visit. Be friendly and encouraging about thrifting.`;
+
+    const result = await model.generateContent(prompt);
+    const summary = result.response.text();
+
+    console.log(`[Gemini] Summary generated successfully`);
+    res.json({ name, summary });
+  } catch (err) {
+    console.error("[Gemini Error]", err?.message || String(err));
+    res.status(500).json({ error: "Failed to generate summary", detail: err?.message || String(err) });
   }
 });
 
