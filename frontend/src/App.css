@@ -145,6 +145,31 @@ body {
   filter: brightness(0.5) 
 }
 
+#resultsHeader{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sortControls select{
+  margin: 6px 0 0;
+}
+
+.sortSelect{
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  font-size: 12px;
+}
+/* the X icon */
+.gm-style .gm-style-iw-c button.gm-ui-hover-effect span{
+  filter: brightness(0.5) 
+
+}
+
 .mapWrap {
   height: 520px;
 }
