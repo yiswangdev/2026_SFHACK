@@ -126,6 +126,12 @@ body {
   box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 
+.resultsCard {
+  height: 520px;
+  display: flex;
+  flex-direction: column;
+}
+
 .cardHeader {
   padding: 14px 14px 10px;
   border-bottom: 1px solid var(--border);
@@ -177,8 +183,28 @@ body {
 
 .results {
   max-height: 520px;
-  overflow: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
   padding: 10px;
+  scroll-behavior: smooth;
+}
+
+.results::-webkit-scrollbar {
+  width: 8px;
+}
+
+.results::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+}
+
+.results::-webkit-scrollbar-thumb {
+  background: rgba(89, 217, 142, 0.35);
+  border-radius: 4px;
+}
+
+.results::-webkit-scrollbar-thumb:hover {
+  background: rgba(89, 217, 142, 0.55);
 }
 
 .resultRow {
@@ -191,6 +217,9 @@ body {
   padding: 12px;
   cursor: pointer;
   margin-bottom: 10px;
+}
+.resultRow:last-child {
+  margin-bottom: 0;
 }
 .resultRow:hover {
   border-color: rgba(89,217,142,0.35);
@@ -278,10 +307,8 @@ body {
 .rightColumn {
   display: flex;
   flex-direction: column;
-  grid-template-rows: auto 1fr;
   gap: 14px;
-  height: fit-content;
-  max-height: calc(100vh - 180px);
+  height: calc(100vh - 180px);
 }
 
 .chatbotCard {
@@ -297,10 +324,30 @@ body {
 
 .chatContent {
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 14px 12px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  scroll-behavior: smooth;
+}
+
+.chatContent::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chatContent::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+}
+
+.chatContent::-webkit-scrollbar-thumb {
+  background: rgba(89, 217, 142, 0.35);
+  border-radius: 4px;
+}
+
+.chatContent::-webkit-scrollbar-thumb:hover {
+  background: rgba(89, 217, 142, 0.55);
 }
 
 .chatFallback {
