@@ -159,6 +159,11 @@ body {
   color: var(--text);
   font-size: 12px;
 }
+/* the X icon */
+.gm-style .gm-style-iw-c button.gm-ui-hover-effect span{
+  filter: brightness(0.5) 
+
+}
 
 .mapWrap {
   height: 520px;
@@ -224,12 +229,16 @@ body {
   border-radius: 999px;
   border: 1px solid rgba(89,217,142,0.35);
   background: rgba(89,217,142,0.12);
-  color: #b9f7d2;
+  color: #1dbe5e;;
   font-size: 12px;
   white-space: nowrap;
+  font-weight: bold
 }
 
-.rating { color: #f5f2c2; }
+.rating { 
+  font-weight: bold;
+  color: #4e4a0e; 
+}
 .muted { color: var(--muted); }
 
 .infoWindow {
@@ -237,6 +246,7 @@ body {
 }
 .infoTitle {
   font-weight: 800;
+  color: black;
   margin-bottom: 4px;
 }
 .infoMeta {
