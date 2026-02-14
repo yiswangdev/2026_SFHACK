@@ -16,6 +16,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [sortBy, setSortBy] = useState("relevance");
+  const [filterBy, setFilterBy] = useState("");
 
   const [center, setCenter] = useState(DEFAULT_CENTER);
   const [places, setPlaces] = useState([]);
@@ -237,9 +238,20 @@ export default function App() {
                 <h2>Results</h2>
                 <p>{places.length ? `${places.length} places found` : "Search to see places"}</p>
               </div>
-              <div className="sortControls">
+  
+            <div className="menuControls">
+              <h2>Filter By:</h2>
+              <select className="selectMenu" value={filterBy} onChange={(e) => setFilterBy(e.target.value)}>
+                <option value="">All Categories</option>
+                <option value="Thrift Store">Thrift Stores</option>
+                <option value="Donation Center">Donation Centers</option>
+                <option value="Exchange Event">Exchange Events</option>
+              </select>
+            </div>
+
+            <div className="menuControls">
                 <h2>Sort By:</h2>
-                <select className="sortSelect" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                <select className="selectMenu" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
                   <option value="relevance">Relevance</option>
                   <option value="rating">Rating</option>
                 </select>
@@ -248,6 +260,7 @@ export default function App() {
 
             <div className="results">
               {[...places]
+              .filter((p) => (filterBy === "All Categories" || p.category.includes(filterBy)))
               .sort((a, b) => {
                 if (sortBy === "rating") {
                   return (b.rating || 0) - (a.rating || 0);

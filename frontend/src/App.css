@@ -147,11 +147,11 @@ body {
   justify-content: space-between;
 }
 
-.sortControls select{
+.menuControls select{
   margin: 6px 0 0;
 }
 
-.sortSelect{
+.selectMenu{
   padding: 6px 10px;
   border-radius: 12px;
   border: 1px solid var(--border);
@@ -276,7 +276,8 @@ body {
 }
 
 .rightColumn {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   grid-template-rows: auto 1fr;
   gap: 14px;
   height: fit-content;
