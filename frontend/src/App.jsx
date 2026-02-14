@@ -5,8 +5,8 @@ import "./App.css";
 const DEFAULT_CENTER = { lat: 39.8283, lng: -98.5795 }; // US center
 const MAP_CONTAINER_STYLE = { width: "100%", height: "100%" };
 
-function Badge({ children }) {
-  return <span className="badge">{children}</span>;
+function Badge({ children, ...props }) {
+  return <span className="badge" {...props}>{children}</span>;
 }
 
 export default function App() {
@@ -151,7 +151,9 @@ export default function App() {
                       <div className="infoMeta">{selectedPlace.address}</div>
 
                       <div className="infoRow">
-                        <Badge>{selectedPlace.category}</Badge>
+                        <Badge id={selectedPlace.category.replaceAll(" ", "-").toLowerCase()}>
+                          {selectedPlace.category}
+                        </Badge>
                         {selectedPlace.rating != null ? (
                           <span className="rating">
                             ⭐ {selectedPlace.rating}{" "}
@@ -215,9 +217,9 @@ export default function App() {
                 }}
               >
                 <div className="resultTop">
-                  <div className="resultName">{p.name}</div>
-                  <Badge>{p.category}</Badge>
-                </div>
+                <div className="resultName">{p.name}</div>
+                  <Badge id={p.category.replaceAll(" ", "-").toLowerCase()}>{p.category}</Badge>
+              </div>
 
                 <div className="resultAddress">{p.address}</div>
 

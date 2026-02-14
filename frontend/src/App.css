@@ -49,7 +49,7 @@ body {
 }
 .brand h1 {
   margin: 0;
-  font-size: 20px;
+  font-size: 2rem;
   line-height: 1.2;
 }
 .brand p {
@@ -138,11 +138,6 @@ body {
   margin: 6px 0 0;
   font-size: 12px;
   color: var(--muted);
-}
-
-/* the X icon */
-.gm-style .gm-style-iw-c button.gm-ui-hover-effect span{
-  filter: brightness(0.5) 
 }
 
 #resultsHeader{
@@ -240,10 +235,48 @@ body {
   font-weight: bold
 }
 
+#thrift-store{
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(89,217,142,0.35);
+  background: rgba(89,217,142,0.12);
+  color: #1dbe5e;;
+  font-size: 12px;
+  white-space: nowrap;
+  font-weight: bold
+}
+
+#donation-center{
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(120,180,255,0.35);
+  background: rgba(120,180,255,0.12);
+  color: #78b4ff;
+  font-size: 12px;
+  white-space: nowrap;
+  font-weight: bold
+}
+
+#exchange-event{
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,180,0,0.35);
+  background: rgba(255,180,0,0.12);
+  color: #ffb400;
+  font-size: 12px;
+  white-space: nowrap;
+  font-weight: bold
+}
+
 .rating { 
   font-weight: bold;
   color: #4e4a0e; 
 }
+
+.resultBottom .rating {
+  color: #997f22;
+}
+
 .muted { color: var(--muted); }
 
 .infoWindow {
