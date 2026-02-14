@@ -256,12 +256,27 @@ body {
 .badge {
   padding: 6px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(89,217,142,0.35);
-  background: rgba(89,217,142,0.12);
-  color: #1dbe5e;;
   font-size: 12px;
   white-space: nowrap;
-  font-weight: bold
+  font-weight: bold;
+}
+
+.badge-thrift-store {
+  border: 1px solid rgba(89, 217, 142, 0.35);
+  background: rgba(89, 217, 142, 0.12);
+  color: #1dbe5e;
+}
+
+.badge-donation-center {
+  border: 1px solid rgba(120, 180, 255, 0.35);
+  background: rgba(120, 180, 255, 0.12);
+  color: #78b4ff;
+}
+
+.badge-exchange-event {
+  border: 1px solid rgba(255, 165, 0, 0.35);
+  background: rgba(255, 165, 0, 0.12);
+  color: #ffa500;
 }
 
 .rating { 

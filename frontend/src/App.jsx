@@ -7,7 +7,8 @@ const DEFAULT_CENTER = { lat: 39.8283, lng: -98.5795 }; // US center
 const MAP_CONTAINER_STYLE = { width: "100%", height: "100%" };
 
 function Badge({ children }) {
-  return <span className="badge">{children}</span>;
+  const categoryClass = children?.toLowerCase().replace(/\s+/g, '-') || '';
+  return <span className={`badge badge-${categoryClass}`}>{children}</span>;
 }
 
 export default function App() {
