@@ -39,6 +39,15 @@ export default function App() {
     [places, selectedId]
   );
 
+  const filteredPlaces = [...places]
+  .filter((p) => filterBy === "All Categories" || p.category.includes(filterBy))
+  .sort((a, b) => {
+    if (sortBy === "rating") {
+      return (b.rating || 0) - (a.rating || 0);
+    }
+    return 0;
+  });
+
   // Fetch chatbot summary when a place is selected
   useEffect(() => {
     if (!selectedPlace) {
@@ -255,6 +264,7 @@ export default function App() {
               <div>
                 <h2>Results</h2>
                 <p>{places.length ? `${places.length} places found` : "Search to see places"}</p>
+                {filteredPlaces.length != places.length ? <p>Showing {filteredPlaces.length} filtered places</p> : null}
               </div>
   
             <div className="menuControls">
@@ -277,17 +287,7 @@ export default function App() {
             </div>
 
             <div className="results">
-              {[...places]
-              .filter((p) => (filterBy === "All Categories" || p.category.includes(filterBy)))
-              .sort((a, b) => {
-                if (sortBy === "rating") {
-                  return (b.rating || 0) - (a.rating || 0);
-                }
-                else{
-                  return 0; // default order (relevance)
-                }
-              })
-              .map((p) => (
+              {filteredPlaces.map((p) => (
                 <button
                   key={p.id}
                   className={`resultRow ${p.id === selectedId ? "active" : ""}`}
