@@ -18,6 +18,7 @@ export default function App() {
   const [error, setError] = useState("");
   const [sortBy, setSortBy] = useState("relevance");
   const [filterBy, setFilterBy] = useState("");
+  const [loadingScreen, setLoadingScreen] = useState(true);
 
   const [center, setCenter] = useState(DEFAULT_CENTER);
   const [places, setPlaces] = useState([]);
@@ -107,6 +108,7 @@ export default function App() {
       setPlaces([]);
     } finally {
       setLoading(false);
+      setLoadingScreen(false);
     }
   };
 
@@ -118,6 +120,19 @@ export default function App() {
 
   return (
     <div className="page">
+      {loadingScreen ? (
+        <div id="loading-screen">
+          <div>
+            <h1>♻️ SecondLife Finder</h1>
+          </div>
+          <div>
+            <h2>Loading...</h2>
+          </div>
+          
+        </div>
+        
+      ) : (     
+      <>
       <header className="header">
         <div className="brand">
           <div className="logoMark">♻️</div>
@@ -310,6 +325,8 @@ export default function App() {
       <footer className="footer">
         <span>Donate, thrift, and swap to keep textiles out of landfills.</span>
       </footer>
+      </>
+      )}
     </div>
   );
 }
