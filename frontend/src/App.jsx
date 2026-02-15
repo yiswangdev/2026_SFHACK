@@ -264,7 +264,7 @@ export default function App() {
               <div>
                 <h2>Results</h2>
                 <p>{places.length ? `${places.length} places found` : "Search to see places"}</p>
-                {filteredPlaces.length != places.length ? <p>Showing {filteredPlaces.length} filtered places</p> : null}
+                {filteredPlaces.length != places.length ? <p>Showing {filteredPlaces.length} filtered places</p> : <p>No filter selected</p>}
               </div>
   
             <div className="menuControls">
