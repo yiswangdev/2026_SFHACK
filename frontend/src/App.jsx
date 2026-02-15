@@ -209,7 +209,9 @@ export default function App() {
                             ⭐ {selectedPlace.rating}{" "}
                             {selectedPlace.ratingCount ? `(${selectedPlace.ratingCount})` : ""}
                           </span>
-                        ) : null}
+                        ) : (
+                          <span className="muted">No rating</span>
+                        )}
                       </div>
 
                       <div className="infoLinks">
